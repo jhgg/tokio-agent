@@ -191,12 +191,19 @@ impl<T> HandleCommon<T> {
     /// Checks if the agent has been stopped.
     ///
     /// ```
-    /// let agent = agent::Agent::spawn_thread(|| 1).unwrap();
-    /// let agent_2 = agent.clone();
+    /// use tokio_agent::{Agent, Result};
     ///
-    /// agent.blocking().stop();
+    /// #[tokio::main]
+    /// async fn main() -> Result<()> {
+    ///     let agent = Agent::spawn_thread(|| 1).unwrap();
+    ///     let agent_2 = agent.clone();
     ///
-    /// assert!(agent_2.is_stopped());
+    ///     agent.stop().await?;
+    ///
+    ///     assert!(agent_2.is_stopped());
+    ///
+    ///     Ok(())
+    /// }
     /// ```
     #[inline(always)]
     pub fn is_stopped(&self) -> bool {
@@ -213,7 +220,7 @@ impl<T> HandleCommon<T> {
     /// prior to evaluating your function.
     ///
     /// ```
-    /// use agent::Agent;
+    /// use tokio_agent::Agent;
     ///
     /// let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
     ///
@@ -234,7 +241,7 @@ impl<T> HandleCommon<T> {
     /// Returns `true` if the [`Agent`] refered to by this handle is the same as `other`'s Agent.
     ///
     /// ```
-    /// use agent::Agent;
+    /// use tokio_agent::Agent;
     ///
     /// let agent = Agent::spawn_thread(|| "the agent").unwrap();
     /// let agent_2 = agent.clone();
@@ -310,7 +317,7 @@ impl<T> Handle<T> {
     /// should stop or continue.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -337,7 +344,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the state is able to be cloned, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -360,7 +367,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the state is able to be cloned, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -384,7 +391,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the provided function is able to be evaluated, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -412,7 +419,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the function is able to be evaluated, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -435,7 +442,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the state is able to be replaced, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -461,7 +468,7 @@ impl<T> Handle<T> {
     /// If the agent is stopped before the state is able to be taken, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -488,7 +495,7 @@ impl<T> Handle<T> {
     /// If the agent was stopped prior to this function was invoked, an error will be returned.
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<()> {
@@ -511,7 +518,7 @@ impl<T> Handle<T> {
     /// This function is cancel-safe.
     ///
     /// ```
-    /// use agent::Agent;
+    /// use tokio_agent::Agent;
     ///
     /// #[tokio::main]
     /// async fn main() {
@@ -540,7 +547,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::call`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 0).unwrap().blocking();
@@ -564,7 +571,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::clone_state`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -583,7 +590,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::get`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -602,7 +609,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::get_and_update`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -625,7 +632,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::update`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -644,7 +651,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::replace`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -665,7 +672,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::take`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
@@ -687,7 +694,7 @@ impl<T> BlockingHandle<T> {
     /// The blocking variant of [`Handle::stop`].
     ///
     /// ```
-    /// use agent::{Agent, Result};
+    /// use tokio_agent::{Agent, Result};
     ///
     /// fn main() -> Result<()> {
     ///     let agent = Agent::spawn_thread(|| 42).unwrap().blocking();
