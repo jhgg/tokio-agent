@@ -150,15 +150,13 @@ pub struct Stopped;
 ///
 /// See the function implementations on this struct for more information on what you can do with an [`Agent`].
 #[derive(Clone)]
-pub struct Handle<T> {
-    common: HandleCommon<T>,
-}
+pub struct Handle<T>(HandleCommon<T>);
 
 impl<T> std::ops::Deref for Handle<T> {
     type Target = HandleCommon<T>;
 
     fn deref(&self) -> &Self::Target {
-        &self.common
+        &self.0
     }
 }
 
@@ -273,7 +271,7 @@ impl<T> std::fmt::Debug for Handle<T> {
 /// The "Blocking" variant of [`Handle`] which can be used to interact with an [`Agent`] outside of a tokio runtime
 /// context.
 #[derive(Clone)]
-pub struct BlockingHandle<T>(Handle<T>);
+pub struct BlockingHandle<T>(HandleCommon<T>);
 
 impl<T> std::fmt::Debug for BlockingHandle<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -293,15 +291,13 @@ impl<T> std::ops::Deref for BlockingHandle<T> {
 
 impl<T> Handle<T> {
     fn new(sender: UnboundedSender<Evaluate<T>>) -> Self {
-        Self {
-            common: HandleCommon { sender },
-        }
+        Self(HandleCommon { sender })
     }
 
     /// Converts this [`Handle`] into a [`BlockingHandle`] which allows you to interact with the the [`Agent`]
     /// outside of a tokio runtime context.
     pub fn blocking(self) -> BlockingHandle<T> {
-        BlockingHandle(self)
+        BlockingHandle(self.0)
     }
 
     /// Makes a synchronous call to the agent, waiting for the agent to evaluate the provided function.
@@ -541,7 +537,7 @@ impl<T> BlockingHandle<T> {
     /// Converts this [`BlockingHandle`] back into an [`Handle`] which allows you to interact with the the
     /// [`Agent`] inside of a tokio runtime context.
     pub fn nonblocking(self) -> Handle<T> {
-        self.0
+        Handle(self.0)
     }
 
     /// The blocking variant of [`Handle::call`].
