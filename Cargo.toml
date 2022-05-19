@@ -1,9 +1,15 @@
 [package]
 name = "tokio-agent"
 version = "0.1.0"
-edition = "2021"
+edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+rust-version = "1.49"
+authors = ["Jake Heinz <me@jh.gg>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/jhgg/tokio-agent"
+homepage = "https://github.com/jhgg/tokio-agent"
+description = """Agents are a simple abstraction around state, inspired by Elixir's Agent."""
 
 [dependencies]
 tokio = { version = "1.0", features = ["sync", "rt"] }
