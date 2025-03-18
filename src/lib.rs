@@ -149,8 +149,13 @@ pub struct Stopped;
 /// agent are dropped, or if the `stop` method is called.
 ///
 /// See the function implementations on this struct for more information on what you can do with an [`Agent`].
-#[derive(Clone)]
 pub struct Handle<T>(HandleCommon<T>);
+
+impl<T> Clone for Handle<T> {
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
+    }
+}
 
 impl<T> std::ops::Deref for Handle<T> {
     type Target = HandleCommon<T>;
@@ -161,9 +166,16 @@ impl<T> std::ops::Deref for Handle<T> {
 }
 
 /// Contains common functionality that is shared between [`Handle`] and [`BlockingHandle`].
-#[derive(Clone)]
 pub struct HandleCommon<T> {
     sender: UnboundedSender<Evaluate<T>>,
+}
+
+impl<T> Clone for HandleCommon<T> {
+    fn clone(&self) -> Self {
+        Self {
+            sender: self.sender.clone(),
+        }
+    }
 }
 
 impl<T> HandleCommon<T> {
